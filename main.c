@@ -12,13 +12,14 @@ int main() {
     const char* program3 = "36 1 IF EMIT ELSE . THEN"; //works
     const char* program4 = "1 2 + 1 + 15 - 3 + -5 + . 10 33 100 108 114 111 87 32 44 111 108 108 101 72 10 EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT EMIT"; //works
     const char* program5 = "VARIABLE X 0 X ! X @ 4 < WHILE X @ 1 + X ! X @ . X @ 4 < 10 EMIT ENDWHILE"; //works
-    const char* program6 = "36 -4 -4 <= IF EMIT ELSE . THEN"; //works with all conditionals and all combinations
+    const char* program6 = "36 -4 -4 <= IF EMIT ELSE . THEN"; //works with all conditionals and all comparators
     const char* program7 = "VARIABLE Y 0 Y ! VARIABLE X 0 X ! X @ 4 < WHILE 0 Y ! X @ 1 + X ! X @ . Y @ 2 < WHILE Y @ 1 + Y ! Y @ . Y @ 2 < ENDWHILE X @ 4 < ENDWHILE"; //works
     const char* program8 = "VARIABLE Y 36 Y ! VARIABLE X 37 X ! Y @ EMIT X @ EMIT"; //works
     const char* program9 = ": INCREMENTVAR DUP @ 1 + SWAP ! ; VARIABLE X 7 X ! X @ . 10 EMIT X INCREMENTVAR X @ ."; //works
-    const char* program10 = ": CR 10 EMIT ; : SPACE 32 EMIT ; : FIRSTN DUP 0 OVER 0 > WHILE DUP . CR 1 + OVER OVER > ENDWHILE ; 5 FIRSTN";
+    const char* program10 = ": CR 10 EMIT ; : SPACE 32 EMIT ; : FIRSTN DUP 0 OVER 0 > WHILE DUP . CR 1 + OVER OVER > ENDWHILE ; 70 FIRSTN"; //works
+    const char* program11 = "1 2 3 4 5 6 7 8 9 DEPTH ."; //works
     context_t* myContext = malloc(sizeof(context_t));
-    init(program10, myContext);
+    init(program11, myContext);
     int j = 0;
     while(j != -1){
         j = execute(myContext);

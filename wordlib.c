@@ -6,11 +6,11 @@
 
 const char* const keyWords[] = {".", "EMIT", "WORD", "VARIABLE", "!", "@", "IF", "ELSE", "THEN", "+",
                                 "-", ">", ">=", "<", "<=", "==", "!=", "WHILE", "ENDWHILE", ";",
-                                ":", "DUP", "SWAP", "OVER"};
+                                ":", "DUP", "SWAP", "OVER", "DEPTH"};
 void (* const funptrs[])(context_t*) = {&print, &printAscii, &getInput, &createVar, &storeAt, &fetch, &conditional,
                                  &condElse, &then, &addition, &subtraction, &greaterThan, &greaterEqualThan, &lessThan, &lessEqualThan,
-                                 &equals, &notEquals, &whileLoop, &endWhile, &endUserDefinedWord, &createUserDefinedWord, &duplicate, &swap, &over};
-const int numKeyWords = 24;
+                                 &equals, &notEquals, &whileLoop, &endWhile, &endUserDefinedWord, &createUserDefinedWord, &duplicate, &swap, &over, &depth};
+const int numKeyWords = 25;
 
 void print(context_t *context) { //.
     long int x = popLong(context->stack);
@@ -395,4 +395,8 @@ void endUserDefinedWord(context_t *context) { // ;
 
 void over(context_t *context) { //OVER
     pushElement(context->stack->top->next, context->stack);
+}
+
+void depth(context_t* context){ //DEPTH
+    pushLong(context->stack->size, context->stack);
 }

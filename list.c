@@ -45,7 +45,18 @@ char* addToFuncList(funcList_t* list, char* name, int len, char* location) {
         } else {
             exists->next = list->first;
         }
-        exists->location = location;
+        //exists->location = location;
+        int i = 0;
+        while(location[i] != ';'){
+            if(location[i] == 0){
+                printf("Function definition is not terminated"); //TODO: crash
+                return NULL;
+            }
+            i++;
+        } i++;
+        exists->location = malloc(i + 2);
+        strncpy(exists->location, location, i);
+        (exists->location)[i] = ' '; (exists->location)[i + 1] = 0; //TODO: test changes.
         exists->len = len;
         exists->name = malloc(sizeof(char) * (len + 1));
         strncpy(exists->name, name, len);
@@ -54,7 +65,7 @@ char* addToFuncList(funcList_t* list, char* name, int len, char* location) {
         list->size++;
     }
     else {
-        printf("Illegal second declaration.\n");
+        printf("Illegal second declaration.\n"); //TODO: crash
         return NULL;
     }
     return exists->location;

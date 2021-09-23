@@ -92,3 +92,12 @@ void del(varList_t* list) {
         iterator = iterator->next;
     }
 }
+
+void delFuncs(funcList_t* list) {
+    func_t* iterator = list->first;
+    while(iterator != NULL) {
+        free(iterator->name);
+        free(iterator);
+        iterator = iterator->next;
+    }
+}

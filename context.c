@@ -57,8 +57,8 @@ void safeCopy(char* source, char* dest, int len) {
     }
 }
 
-void init(const char* program, context_t* context){
-    context->executionPoint = program;
+void init(char* program, context_t* context){
+    //context->executionPoint = program;
     context->currentLen = getCurrentLen(program);
 
     context->addressStack = malloc(sizeof(stack_t));
@@ -77,22 +77,48 @@ void init(const char* program, context_t* context){
     context->customWords = malloc(sizeof(funcList_t));
     context->customWords->first = NULL;
     context->customWords->size = 0;
+    setProgram(program, context);
+}
 
-    char* lookAt = context->executionPoint;
+void contextDestructor(context_t* context){
+    clearContext(context);
+}
+
+void setProgram(char* program, context_t* context){
+    char* lookAt = program;
 
     while((*lookAt) != 0){
         lookAt = lookAhead(context, lookAt, 1);
     }
     if(*(lookAt - 1) != ' '){
         //printf("Adding whitespace.\n");
-        unsigned long size = strlen(context->executionPoint) + 2; // + whitespace + nullterm
-        char* temp = malloc(size);
-        strncpy(temp, context->executionPoint, size);
-        temp[size-2] = ' '; temp[size-1] = 0;
-        context->executionPoint = temp;
-        //printf(context->executionPoint); printf("test");
+        unsigned long size = strlen(program) + 2; // + whitespace + nullterm
+        context->programBegin = malloc(size);
+        strncpy(context->programBegin, program, size);
+        (context->programBegin)[size-2] = ' '; (context->programBegin)[size-1] = 0;
     }
     else {
-
+        context->programBegin = malloc(strlen(program));
+        strncpy(context->programBegin, program, strlen(program));
     }
+    context->executionPoint = context->programBegin;
+}
+
+void clearProgram(context_t* context){
+    free(context->programBegin);
+}
+
+void clearContext(context_t* context){
+    free(context->programBegin); //Need to reset to beginning of program.
+    while(context->conditionalStack->size > 0){
+        popLong(context->conditionalStack);
+    }
+    while(context->addressStack->size > 0){
+        popString(context->addressStack);
+    }
+    while(context->stack->size > 0){
+        popLong(context->stack);
+    }
+    del(context->globals);
+    delFuncs(context->customWords);
 }

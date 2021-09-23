@@ -9,6 +9,7 @@
 
 typedef struct {
     char* executionPoint;
+    char* programBegin;
     int currentLen;
     stack_t* stack;
     stack_t* conditionalStack; //Not for public use. Used by IF keyword only.
@@ -17,11 +18,15 @@ typedef struct {
     funcList_t* customWords;
 } context_t;
 
-void init(const char* program, context_t* context);
+void init(char* program, context_t* context);
 void goNext(context_t* context);
 char* lookAhead(context_t* context, char* begin, int numWords);
 int getCurrentLen(char* string);
 void safeCopy(char* source, char* dest, int len);
 int execute(context_t* context);
+void contextDestructor(context_t* context);
+void clearContext(context_t* context);
+void setProgram(char* program, context_t* context);
+void clearProgram(context_t* context);
 
 #endif //FORTHINTERPRETER_CONTEXT_H

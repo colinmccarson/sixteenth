@@ -19,7 +19,10 @@ void print(context_t *context) { //.
 
 void printAscii(context_t *context) { //EMIT
     long int x = popLong(context->stack) % 0x100; //printable range
-    printf("%c", x);
+    char c = (char) x;
+    char str[2] = {c, 0};
+    //printf("%c", x);
+    printf("%s", str);
 }
 
 void getInput(context_t *context) { //WORD
@@ -256,6 +259,10 @@ void swap(context_t* context){ //SWAP
 
 int isNumber(context_t *context) {
     char* word = context->executionPoint;
+    if(context->currentLen == 0){
+        //Cannot have numbers of length zero.
+        return 0;
+    }
     for(int i = 0; i < context->currentLen; i++){
         char c = *(word + i);
         if(c < 48 || c > 57){
@@ -330,8 +337,15 @@ int execute(context_t *context) {
     //printf("Current len is %d\n", context->currentLen);
     //printf(context->executionPoint); printf("\n");
     if (*(context->executionPoint) == 0){
-        printf("\nEnd of program\n");
+        printf(" ok\n");
         return -1;
+    }
+    else if((*(context->executionPoint) == ' ') || (*(context->executionPoint) == '\n')){ //TODO: necessary?
+        /*if(*(context->executionPoint) == '\n'){
+            printf("newline");
+        }*/
+        (context->executionPoint)++;
+        return 8;
     }
     if(isNumber(context)){
         pushLong(parseLong(context), context->stack);
@@ -364,7 +378,7 @@ int execute(context_t *context) {
             return 1;
         }
         else {
-            printf("FailureElse at:%s\n", context->executionPoint);
+            printf("Unrecognized word at:%s\n", context->executionPoint);
             return -1;
         }
     }
@@ -375,7 +389,8 @@ void createUserDefinedWord(context_t *context) { // :
     int i = isNumber(context);
     int j = isVariable(context);
     int k = isKeyWord(context) != -1;
-    if(i || k || j){
+    int l = isUserDefinedWord(context);
+    if(i || k || j || l){
         printf("Illegal user-defined word name.\n");
         return;
     }
@@ -399,4 +414,23 @@ void over(context_t *context) { //OVER
 
 void depth(context_t* context){ //DEPTH
     pushLong(context->stack->size, context->stack);
+}
+
+void createStruct(context_t* context){ // STRUCT
+    goNext(context);
+    struct_t* s;
+    int i = isNumber(context);
+    int j = isVariable(context);
+    int k = isKeyWord(context) != -1;
+    int l = isUserDefinedWord(context);
+    if(i || j || k || l){
+        printf("Illegal struct name.");
+        return; //TODO: consume tokens until struct is terminated
+    }
+    else {
+        s = addToStructList(context->structList, context->executionPoint, context->currentLen);
+    }
+    while(strncmp(context->executionPoint, "; ", 2) != 0){
+        goNext(context);
+    }
 }

@@ -10,26 +10,29 @@ void getLine(shell_t* shell){
     char input[512];
     //scanf("%s", input);
     fgets(input, 512, stdin);
-    for(int i = 0; i < 512; i++){
+    int inputLength = strlen(input);
+    for(int i = 0; i < inputLength; i++){
         if(input[i] == '\n'){
             input[i] = ' ';
         }
     }
-    shell->currentLine = malloc(strlen(input));
-    for(int i = 0; i < strlen(shell->currentLine); i++){
-        if (*(shell->currentLine + i) == '\n'){
+    shell->currentLine = malloc(inputLength + 1);
+    strncpy(shell->currentLine, input, inputLength);
+    (shell->currentLine)[inputLength] = 0;
+    /*for(int i = 0; i < strlen(shell->currentLine); i++){
+        if (*(shell->currentLine + i) == '\n' || *(shell->currentLine + i) == '\b'){
             (shell->currentLine)[i] = ' ';
         }
+    }*/
+    if((shell->currentLine)[strlen(shell->currentLine)-1] == ' ' && (shell->currentLine)[strlen(shell->currentLine)-2] == ' '){
+        shell->currentLine[strlen(shell->currentLine)-1] = 0;
     }
-    strncpy(shell->currentLine, input, strlen(input));
     if(!(shell->contextInitialized)){
         init(shell->currentLine, shell->context);
         shell->contextInitialized = 1;
     }
     else {
         setProgram(shell->currentLine, shell->context);
-        //TODO: THIS DOES NOT WORK. Need to 'build' program as we go, because user-defined functions reference strings.
-        //TODO: either build as we go or change implementation of user-defined functions to copy string. Latter seems preferable.
     }
 }
 

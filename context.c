@@ -59,15 +59,23 @@ void safeCopy(char* source, char* dest, int len) {
 
 void init(char* program, context_t* context){
     //context->executionPoint = program;
-    context->currentLen = getCurrentLen(program);
+    for(int i = 0; i < strlen(program); i++){
+        if (*(program + i) == '\n'){
+            *(program + i) = ' ';
+        }
+    }
 
+    context->currentLen = getCurrentLen(program);
     context->addressStack = malloc(sizeof(stack_t));
     context->conditionalStack = malloc(sizeof(stack_t));
+
     context->stack = malloc(sizeof(stack_t));
     context->stack->size = 0;
     context->stack->top = NULL;
+
     context->addressStack->size = 0;
     context->addressStack->top = NULL;
+
     context->conditionalStack->size = 0;
     context->conditionalStack->top = NULL;
 
@@ -77,6 +85,12 @@ void init(char* program, context_t* context){
     context->customWords = malloc(sizeof(funcList_t));
     context->customWords->first = NULL;
     context->customWords->size = 0;
+
+    context->structList = malloc(sizeof(structList_t));
+    context->structList->first = NULL;
+    context->structList->size = 0;
+
+
     setProgram(program, context);
 }
 
@@ -86,7 +100,8 @@ void contextDestructor(context_t* context){
 
 void setProgram(char* program, context_t* context){
     char* lookAt = program;
-
+    int programLength = strlen(program); //DEBUG
+    char* pos2 = program + 1; char* pos3 = program + 2; char* pos4 = program + 3;
     while((*lookAt) != 0){
         lookAt = lookAhead(context, lookAt, 1);
     }
@@ -98,10 +113,12 @@ void setProgram(char* program, context_t* context){
         (context->programBegin)[size-2] = ' '; (context->programBegin)[size-1] = 0;
     }
     else {
-        context->programBegin = malloc(strlen(program));
-        strncpy(context->programBegin, program, strlen(program));
+        context->programBegin = malloc(programLength + 1);
+        strncpy(context->programBegin, program, programLength);
+        (context->programBegin)[programLength] = 0;
     }
     context->executionPoint = context->programBegin;
+    context->currentLen = getCurrentLen(context->executionPoint);
 }
 
 void clearProgram(context_t* context){

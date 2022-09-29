@@ -26,9 +26,11 @@ long int* addToVarList(varList_t* list, char* name, int len, int val) {
         (new->name)[len] = 0; //add null terminator
         list->first = new;
         list->size++;
+        return exists; //needed?
     }
     else {
-        *exists = val;
+        //Do nothing if it already exists.
+        //*exists = val;
     }
     return exists;
 }
@@ -110,5 +112,65 @@ void delFuncs(funcList_t* list) {
         free(iterator->name);
         free(iterator);
         iterator = iterator->next;
+    }
+}
+
+struct_t* findStruct(structList_t* list, char* name, int len){
+    struct_t* iterator = list->first;
+    while(iterator != NULL){
+        if(!strncmp(name, iterator->name, max(len, strlen(iterator->name)))){
+            return iterator;
+        }
+    }
+    return NULL;
+}
+
+struct_t* addToStructList(structList_t* list, char* loc, int len){
+    struct_t* s;
+    if(findStruct(list, loc, len) == NULL){
+        s = malloc(sizeof(struct_t));
+        if (s == NULL){
+            printf("Could not allocate memory for struct");
+            return 0;
+        }
+
+        if (list->size == 0){
+            list->first = s;
+            s->next = NULL;
+        }
+        else {
+            s->next = list->first;
+            list->first = s;
+        }
+        s->name = malloc(sizeof(char) * (len+1));
+        strncpy(s->name, loc, len);
+        s->variables = malloc(sizeof(varList_t));
+        int i = 0;
+        while(loc[i] != ';'){
+            if(loc[i] == 0){
+                printf("Struct definition is not terminated"); //TODO: crash
+                return NULL;
+            }
+            i++;
+        } i++;
+        char* myLoc = loc;
+        char* tmp = loc;
+        while(*(myLoc) != ';'){
+            addToVarList(s->variables, myLoc, dLen(myLoc), 0);
+            tmp = myLoc + dLen(myLoc) + 1;
+            long int val = 0;
+            if(isValidNumber(tmp, dLen(tmp))){
+                val = parseLong(tmp, dLen(tmp));
+                addToVarList(s->variables, myLoc, dLen(myLoc), val); //TODO: resolve warning
+                myLoc = tmp + dLen(tmp) + 1;
+            }
+            else {
+                addToVarList(s->variables, myLoc, dLen(myLoc), 0);
+                myLoc += dLen(myLoc) + 1;
+            }
+        }
+    }
+    else {
+        return NULL;
     }
 }

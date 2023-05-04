@@ -4,9 +4,9 @@ To build: clone. Navigate to the repo. make.
 
 Developed under WSL for WSL. Might not work if not built and run on WSL. Might build under Cygwin (it does for me), which would allow running on windows.
 
-Running the executable runs the interpreter in shell mode. Currently this is the only mode. However an entire program can be still be easily run, using the following command:
+Running the executable runs the interpreter in shell mode. Currently this is the only mode.
 
-./sixteenth < program.txt
+The comamnd "./sixteenth < program.txt" causes the shell to loop. This is currently under investigation.
 
 A forth word is any whitespace delimited stream of characters. Integers (e.g. -5 7 8) are pushed directly to the stack. Strings are not yet supported, but could probably be implemented (in forth) with some effort. The same goes for floats. But for the moment, everything on the stack is an integer.
 

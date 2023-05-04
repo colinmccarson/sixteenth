@@ -118,7 +118,7 @@ void delFuncs(funcList_t* list) {
 struct_t* findStruct(structList_t* list, char* name, int len){
     struct_t* iterator = list->first;
     while(iterator != NULL){
-        if(!strncmp(name, iterator->name, max(len, strlen(iterator->name)))){
+        if(!strncmp(name, iterator->type, max(len, strlen(iterator->type)))){
             return iterator;
         }
     }
@@ -142,8 +142,8 @@ struct_t* addToStructList(structList_t* list, char* loc, int len){
             s->next = list->first;
             list->first = s;
         }
-        s->name = malloc(sizeof(char) * (len+1));
-        strncpy(s->name, loc, len);
+        s->type = malloc(sizeof(char) * (len + 1));
+        strncpy(s->type, loc, len);
         s->variables = malloc(sizeof(varList_t));
         int i = 0;
         while(loc[i] != ';'){
@@ -160,7 +160,7 @@ struct_t* addToStructList(structList_t* list, char* loc, int len){
             tmp = myLoc + dLen(myLoc) + 1;
             long int val = 0;
             if(isValidNumber(tmp, dLen(tmp))){
-                val = parseLong(tmp, dLen(tmp));
+                val = parseLongFromStr(tmp, dLen(tmp));
                 addToVarList(s->variables, myLoc, dLen(myLoc), val); //TODO: resolve warning
                 myLoc = tmp + dLen(tmp) + 1;
             }
@@ -172,5 +172,17 @@ struct_t* addToStructList(structList_t* list, char* loc, int len){
     }
     else {
         return NULL;
+    }
+}
+
+void copyVarList(varList_t* source, varList_t* dest){
+    var_t* v = source->first;
+    var_t* d = malloc(sizeof(var_t));
+    d->next = NULL;
+    while (v != NULL){
+        d->val = v->val;
+        d->name = v->name;
+        d->next = (v->next == NULL) ? NULL : malloc(sizeof(var_t));
+        v = v->next;
     }
 }

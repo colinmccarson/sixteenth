@@ -31,8 +31,8 @@ void getInput(context_t *context) { //WORD
     pushLong(x, context->stack);
 }
 
-void createVar(context_t *context) { //VARIABLE <name>. No scoping yet. Consumes 2 tokens.
-    goNext(context); //Get the name
+void createVar(context_t *context) { //VARIABLE <type>. No scoping yet. Consumes 2 tokens.
+    goNext(context); //Get the type
     char* name = context->executionPoint;
     addToVarList(context->globals, context->executionPoint, context->currentLen, 0); //For now variables are zero-initialized.
 }
@@ -391,7 +391,7 @@ void createUserDefinedWord(context_t *context) { // :
     int k = isKeyWord(context) != -1;
     int l = isUserDefinedWord(context);
     if(i || k || j || l){
-        printf("Illegal user-defined word name.\n");
+        printf("Illegal user-defined word type.\n");
         return;
     }
     else {
@@ -416,7 +416,7 @@ void depth(context_t* context){ //DEPTH
     pushLong(context->stack->size, context->stack);
 }
 
-void createStruct(context_t* context){ // STRUCT
+void defineStruct(context_t* context){ // STRUCT
     goNext(context);
     struct_t* s;
     int i = isNumber(context);
@@ -424,13 +424,21 @@ void createStruct(context_t* context){ // STRUCT
     int k = isKeyWord(context) != -1;
     int l = isUserDefinedWord(context);
     if(i || j || k || l){
-        printf("Illegal struct name.");
+        printf("Illegal struct type.");
         return; //TODO: consume tokens until struct is terminated
     }
     else {
-        s = addToStructList(context->structList, context->executionPoint, context->currentLen);
+        s = addToStructList(context->customStructs, context->executionPoint, context->currentLen);
     }
     while(strncmp(context->executionPoint, "; ", 2) != 0){
         goNext(context);
     }
+}
+
+void instantiateStruct(context_t* context){ //MKSTRUCT
+
+}
+
+int isStruct(context_t* context){
+    struct_t* s = findStruct(context->customStructs, context->executionPoint, context->currentLen);
 }

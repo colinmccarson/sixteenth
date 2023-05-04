@@ -70,7 +70,7 @@ void init(char* program, context_t* context){
     context->conditionalStack = malloc(sizeof(stack_t));
 
     context->stack = malloc(sizeof(stack_t));
-    context->stack->size = 0;
+    context->stack->size = 0; //TODO: this sets size as the null ptr. behavior is as expected but should be changed.
     context->stack->top = NULL;
 
     context->addressStack->size = 0;
@@ -86,9 +86,9 @@ void init(char* program, context_t* context){
     context->customWords->first = NULL;
     context->customWords->size = 0;
 
-    context->structList = malloc(sizeof(structList_t));
-    context->structList->first = NULL;
-    context->structList->size = 0;
+    context->customStructs = malloc(sizeof(structList_t));
+    context->customStructs->first = NULL;
+    context->customStructs->size = 0;
 
 
     setProgram(program, context);

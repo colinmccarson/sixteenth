@@ -34,8 +34,8 @@ typedef struct {
 } funcList_t;
 
 struct struct_s {
-    char* name;
-    varList_t* variables;
+    char* type;
+    varList_t* variables; //TODO: refactor; change from being a varlist to being DA array of names
     struct struct_s* next;
 };
 
@@ -45,6 +45,19 @@ typedef struct {
     struct_t* first;
     size_t* size;
 } structList_t;
+
+struct structObj_s {
+    char* name;
+    struct_t* _s;
+    struct structObj_s* next;
+};
+
+typedef struct structObj_s structObj_t;
+
+typedef struct {
+    structObj_t* first;
+    size_t* size;
+} structObjList_t;
 
 long int* addToVarList(varList_t* list, char* name, int len, int val);
 
@@ -61,5 +74,7 @@ void delFuncs(funcList_t* list);
 struct_t* findStruct(structList_t*, char* name, int len);
 
 struct_t* addToStructList(structList_t* list, char* loc, int len);
+
+void copyVarList(varList_t* source, varList_t* dest);
 
 #endif //FORTHINTERPRETER_LIST_H

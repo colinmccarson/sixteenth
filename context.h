@@ -16,7 +16,8 @@ typedef struct {
     stack_t* addressStack;
     varList_t* globals;
     funcList_t* customWords;
-    structList_t* structList;
+    structList_t* customStructs;
+    structObjList_t* instantiatedStructs;
 } context_t;
 
 void init(char* program, context_t* context);

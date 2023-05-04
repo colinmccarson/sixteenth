@@ -39,7 +39,7 @@ int isValidNumber(char* str, int len) {
     return 1;
 }
 
-long int parseLong(char* str, int len) {
+long int parseLongFromStr(char* str, int len) {
     long int num = 0;
     for(int i = 0; i < len; i++){
         if(*(str) == '-'){

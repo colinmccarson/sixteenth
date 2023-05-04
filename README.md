@@ -6,6 +6,8 @@ Developed under WSL for WSL. Might not work if not built and run on WSL. Might b
 
 Running the executable runs the interpreter in shell mode. Currently this is the only mode.
 
+To run: "path/sixteenth" or if you are in the directory, "./sixteenth"
+
 The command "./sixteenth < program.txt" causes the shell to loop. This is currently under investigation.
 
 A forth word is any whitespace delimited stream of characters. Integers (e.g. -5 7 8) are pushed directly to the stack. Strings are not yet supported, but could probably be implemented (in forth) with some effort. The same goes for floats. But for the moment, everything on the stack is an integer.

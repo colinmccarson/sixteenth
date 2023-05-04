@@ -1,5 +1,7 @@
 Usage:
 
+To build: clone. Navigate to the repo. make.
+
 Developed under WSL for WSL. Will probably not work if not run on WSL. Might build under Cygwin (it does for me). 
 
 A forth word is any whitespace delimited stream of characters. Integers (e.g. -5 7 8) are pushed directly to the stack. Strings are not yet supported, but could probably be implemented (in forth) with some effort. The same goes for floats. But for the moment, everything on the stack is an integer.

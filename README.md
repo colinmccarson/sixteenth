@@ -2,7 +2,7 @@ Usage:
 
 To build: clone. Navigate to the repo. make.
 
-Developed under WSL for WSL. Might not work if not built and run on WSL. Might build under Cygwin (it does for me, at least in CLION), which would allow running on windows.
+Developed under WSL for WSL. Might not work if not built and run on WSL. Might build under Cygwin (it does for me), which would allow running on windows.
 
 Running the executable runs the interpreter in shell mode. Currently this is the only mode.
 

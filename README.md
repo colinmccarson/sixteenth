@@ -10,6 +10,9 @@ The command "./sixteenth < program.txt" causes the shell to loop. This is curren
 
 A forth word is any whitespace delimited stream of characters. Integers (e.g. -5 7 8) are pushed directly to the stack. Strings are not yet supported, but could probably be implemented (in forth) with some effort. The same goes for floats. But for the moment, everything on the stack is an integer.
 
+To push to the stack:
+<integer> <cr> (i.e. press enter)
+
 "." This word pops and prints the top of the stack, as an integer.
 
 "EMIT" pops and prints as ASCII
@@ -38,3 +41,13 @@ A forth word is any whitespace delimited stream of characters. Integers (e.g. -5
 "DEPTH" returns the stack depth
 
 "POP" pops the stack.
+
+The following is an example program:
+
+: CR 10 EMIT ;
+: SPACE 32 EMIT ;
+: FIRSTN DUP 0 OVER 0 > WHILE DUP . CR 1 + OVER OVER > ENDWHILE ;
+: FIRSTNRECURSIVEREVERSE DUP . CR 1 - DUP 0 > IF FIRSTNRECURSIVEREVERSE THEN ;
+
+35 FIRSTN
+10 FIRSTNRECURSIVE

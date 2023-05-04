@@ -18,7 +18,7 @@ int main() {
     char* program11 = "1 2 3 4 5 6 7 8 9 DEPTH ."; //works
     context_t* myContext = malloc(sizeof(context_t));
     init(program10, myContext);
-    int branch = 1;
+    int branch = 0;
     if(branch) {
         int j = 0;
         while (j != -1) {
